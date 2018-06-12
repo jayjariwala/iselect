@@ -8,7 +8,7 @@ let mainWindow;
 
 app.on('ready', _=> {
   mainWindow = new BrowserWindow();
-  mainWindow.loadURL(`file://${__dirname}/navigation.html`);
+  mainWindow.loadURL(`file://${__dirname}/../views/navigation.html`);
   ipc.on('load_tree_data', _=> {
     treeLoader(json => {
       mainWindow.webContents.send('jsondata', json);
