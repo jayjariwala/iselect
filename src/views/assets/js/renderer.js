@@ -98,36 +98,43 @@ function generateXML(originalJSON, selectedNav) {
 
 ipc.send('load_tree_data');
 
-ipc.on('html5andXmlDataFetch', (event, html5fetch, xmljson) => {
-  console.log("html5 json::", html5fetch);
-  console.log("xml json:::", xmljson);
+ipc.on('sendData', (event, html5json, xmljson) => {
+
+  //Render xml data with checkbox
+  let originalxmlJSON = xmljson;
+  let links = xmljson.bwFrame.nav_data[0].outline[0].links[0].slidelink;
+  let navigation = generateList(links);
+  $('#jstree').html(navigation);
+
+  // checkbox list and folder style
+  $('#jstree').jstree({
+    "core": {
+      "themes": {
+        "variant": "large"
+      }
+    },
+    "checkbox": {
+      "keep_selected_style": false
+    },
+    "plugins": ["wholerow", "checkbox"]
+  });
+
+
+  // Generate Button click listener
+  $('#generateXML').on('click', function () {
+    const selectedTree = $('#jstree').jstree('get_selected');
+    const manipulatedXmlNav = generateXML(originalxmlJSON, selectedTree);
+    let newXmlNavBar = JSON.parse(JSON.stringify(originalxmlJSON));
+    newXmlNavBar.bwFrame.nav_data[0].outline[0].links[0].slidelink = manipulatedXmlNav;
+    const manipulatedHtmlNav = generateJS(html5json, selectedTree);
+    let newHtmlNavBar = JSON.parse(JSON.stringify(html5json));
+    newHtmlNavBar.navData.outline.links = manipulatedHtmlNav;
+    ipc.send('generateNavBar', newXmlNavBar, newHtmlNavBar);
+  })
+
 })
 
 // ipc.on('jsondata', (event, json) => {
-//   let originalJSON = json;
-//   let links = json.bwFrame.nav_data[0].outline[0].links[0].slidelink;
-//   let navigation = generateList(links);
-//   $('#jstree').html(navigation);
-
-//   $('#jstree').jstree({
-//     "core": {
-//       "themes": {
-//         "variant": "large"
-//       }
-//     },
-//     "checkbox": {
-//       "keep_selected_style": false
-//     },
-//     "plugins": ["wholerow", "checkbox"]
-//   });
-
-//   $('#generateXML').on('click', function () {
-//     const selectedTree = $('#jstree').jstree('get_selected');
-//     const manipulatedNav = generateXML(originalJSON, selectedTree);
-//     let newNavBar = JSON.parse(JSON.stringify(originalJSON));
-//     newNavBar.bwFrame.nav_data[0].outline[0].links[0].slidelink = manipulatedNav;
-//     ipc.send('generateXML', newNavBar);
-//   })
 // })
 
 // ipc.on('html5json', (event, html5json) => {
@@ -137,7 +144,6 @@ ipc.on('html5andXmlDataFetch', (event, html5fetch, xmljson) => {
 //     const manipulatedNav = generateJS(html5json, selectedTree);
 //     let newNavBar = JSON.parse(JSON.stringify(html5json));
 //     newNavBar.navData.outline.links = manipulatedNav;
-//     console.log("new navbar::", newNavBar);
 //     ipc.send('generateJS', newNavBar);
 //   });
 // })

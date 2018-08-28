@@ -11,21 +11,19 @@ module.exports = function () {
         width: 1080,
         height: 800,
     });
+
     mainWindow.loadURL(`file://${__dirname}/../views/navigation.html`);
+
     ipc.on('load_tree_data', _ => {
-        //callback hell :D :S  refector => async/await
         treeLoader(xmljson => {
             fetchHtmlFrame(html5json => {
-                console.log("xmljson", xmljson);
-                console.log("html5json", html5json);
-                mainWindow.webContents.send('html5andXmlDataFetch', html5json, xmljson);
+                mainWindow.webContents.send('sendData', html5json, xmljson);
             });
         });
     })
-    ipc.on('generateXML', (event, jsondata) => {
-        generateXML(jsondata);
-    })
-    ipc.on('generateJS', (event, jsondata) => {
-        generateJS(jsondata);
+
+    ipc.on('generateNavBar', (event, newXmlNavBar, newHtmlNavBar) => {
+        generateXML(newXmlNavBar);
+        generateJS(newHtmlNavBar);
     })
 }

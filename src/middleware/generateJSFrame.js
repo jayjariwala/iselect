@@ -5,7 +5,6 @@ module.exports = function generateJSFrame(jsondata) {
     const generateJS = "window.globalProvideData('frame','" + JSON.stringify(jsondata) + "')";
     fs.writeFile('updated-frame.js', generateJS, (err, data) => {
         if (err) throw err;
-        console.log("file created successfully");
+        console.log("Successfully writter our update to JS file");
     });
-    console.log("save output in js file");
 };
