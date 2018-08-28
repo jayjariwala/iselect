@@ -14,11 +14,11 @@ module.exports = function () {
     mainWindow.loadURL(`file://${__dirname}/../views/navigation.html`);
     ipc.on('load_tree_data', _ => {
         //callback hell :D :S  refector => async/await
-        treeLoader(json => {
-            mainWindow.webContents.send('jsondata', json);
-            fetchHtmlFrame(html5fetch => {
-                //  do stuff in here
-                mainWindow.webContents.send('html5json', html5fetch);
+        treeLoader(xmljson => {
+            fetchHtmlFrame(html5json => {
+                console.log("xmljson", xmljson);
+                console.log("html5json", html5json);
+                mainWindow.webContents.send('html5andXmlDataFetch', html5json, xmljson);
             });
         });
     })

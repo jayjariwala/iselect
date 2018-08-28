@@ -6,8 +6,6 @@ module.exports = function (html5fetch) {
         const startTrim = data.toString().indexOf('{');
         const endTrim = data.toString().lastIndexOf('}');
         const html5OriginalNav = JSON.parse(data.toString().substring(startTrim, endTrim + 1));
-        console.log("html5 original nav::",
-            html5OriginalNav);
         //got json array or what?
         html5fetch(html5OriginalNav);
     })

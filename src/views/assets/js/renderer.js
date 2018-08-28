@@ -98,41 +98,46 @@ function generateXML(originalJSON, selectedNav) {
 
 ipc.send('load_tree_data');
 
-ipc.on('jsondata', (event, json) => {
-  let originalJSON = json;
-  let links = json.bwFrame.nav_data[0].outline[0].links[0].slidelink;
-  let navigation = generateList(links);
-  $('#jstree').html(navigation);
-
-  $('#jstree').jstree({
-    "core": {
-      "themes": {
-        "variant": "large"
-      }
-    },
-    "checkbox": {
-      "keep_selected_style": false
-    },
-    "plugins": ["wholerow", "checkbox"]
-  });
-
-  $('#generateXML').on('click', function () {
-    const selectedTree = $('#jstree').jstree('get_selected');
-    const manipulatedNav = generateXML(originalJSON, selectedTree);
-    let newNavBar = JSON.parse(JSON.stringify(originalJSON));
-    newNavBar.bwFrame.nav_data[0].outline[0].links[0].slidelink = manipulatedNav;
-    ipc.send('generateXML', newNavBar);
-  })
+ipc.on('html5andXmlDataFetch', (event, html5fetch, xmljson) => {
+  console.log("html5 json::", html5fetch);
+  console.log("xml json:::", xmljson);
 })
 
-ipc.on('html5json', (event, html5json) => {
-  console.log("html5 json::", html5json);
-  $('#generateXML').on('click', function () {
-    const selectedTree = $('#jstree').jstree('get_selected');
-    const manipulatedNav = generateJS(html5json, selectedTree);
-    let newNavBar = JSON.parse(JSON.stringify(html5json));
-    newNavBar.navData.outline.links = manipulatedNav;
-    console.log("new navbar::", newNavBar);
-    ipc.send('generateJS', newNavBar);
-  });
-})
+// ipc.on('jsondata', (event, json) => {
+//   let originalJSON = json;
+//   let links = json.bwFrame.nav_data[0].outline[0].links[0].slidelink;
+//   let navigation = generateList(links);
+//   $('#jstree').html(navigation);
+
+//   $('#jstree').jstree({
+//     "core": {
+//       "themes": {
+//         "variant": "large"
+//       }
+//     },
+//     "checkbox": {
+//       "keep_selected_style": false
+//     },
+//     "plugins": ["wholerow", "checkbox"]
+//   });
+
+//   $('#generateXML').on('click', function () {
+//     const selectedTree = $('#jstree').jstree('get_selected');
+//     const manipulatedNav = generateXML(originalJSON, selectedTree);
+//     let newNavBar = JSON.parse(JSON.stringify(originalJSON));
+//     newNavBar.bwFrame.nav_data[0].outline[0].links[0].slidelink = manipulatedNav;
+//     ipc.send('generateXML', newNavBar);
+//   })
+// })
+
+// ipc.on('html5json', (event, html5json) => {
+//   console.log("html5 json::", html5json);
+//   $('#generateXML').on('click', function () {
+//     const selectedTree = $('#jstree').jstree('get_selected');
+//     const manipulatedNav = generateJS(html5json, selectedTree);
+//     let newNavBar = JSON.parse(JSON.stringify(html5json));
+//     newNavBar.navData.outline.links = manipulatedNav;
+//     console.log("new navbar::", newNavBar);
+//     ipc.send('generateJS', newNavBar);
+//   });
+// })
