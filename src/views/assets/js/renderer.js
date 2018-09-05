@@ -1,6 +1,10 @@
 const fs = require('fs');
 const electron = require('electron');
 const ipc = electron.ipcRenderer;
+const {
+  shell
+} = require('electron');
+
 
 function generateList(links) {
   return links.map((link, headingNum) => {
@@ -132,6 +136,11 @@ ipc.on('sendData', (event, html5json, xmljson) => {
     ipc.send('generateNavBar', newXmlNavBar, newHtmlNavBar);
   })
 
+})
+
+ipc.on('savedFile', (event, filePath) => {
+  console.log("saved file", filePath);
+  shell.showItemInFolder(filePath);
 })
 
 // ipc.on('jsondata', (event, json) => {

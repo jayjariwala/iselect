@@ -36,8 +36,12 @@ module.exports = function () {
                                 name: 'zip',
                                 extensions: ['zip']
                             }]
-                        }, (response) => {
-                            zipGenerator(response);
+                        }, (savePath) => {
+                            zipGenerator(savePath).then((res) => {
+                                if (res) {
+                                    mainWindow.webContents.send('savedFile', savePath);
+                                }
+                            });
                         });
                     }
                 })
