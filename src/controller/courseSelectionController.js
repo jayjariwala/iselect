@@ -4,7 +4,7 @@ const {
 } = require('electron');
 const BrowserWindow = require('electron').BrowserWindow;
 // const treeLoader = require('../middleware/treeloader.js');
-// const generateXML = require('../middleware/generateXML.js');
+const generateXML = require('../middleware/generateXML.js');
 const generateJS = require('../middleware/generateJSFrame.js');
 // const fetchHtmlFrame = require('../middleware/fetchHtmlFrame.js');
 const ipc = electron.ipcMain;
