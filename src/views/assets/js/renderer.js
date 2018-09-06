@@ -100,10 +100,10 @@ function generateXML(originalJSON, selectedNav) {
   return manipuledNav;
 }
 
-ipc.send('load_tree_data');
+ipc.send('fetch_tree_data');
 
 ipc.on('sendData', (event, html5json, xmljson) => {
-
+  console.log("send data recieve");
   //Render xml data with checkbox
   let originalxmlJSON = xmljson;
   let links = xmljson.bwFrame.nav_data[0].outline[0].links[0].slidelink;
